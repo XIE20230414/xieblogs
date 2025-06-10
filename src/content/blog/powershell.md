@@ -2,7 +2,7 @@
 title: powershell脚本
 description: 关于「powershell脚本」的记录与想法
 pubDate: 2025-06-10
-image: /image/p2.png
+image: /image/p16.png
 categories:
   - tech
 tags:
