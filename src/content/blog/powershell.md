@@ -122,3 +122,6 @@ if (-not [string]::IsNullOrWhiteSpace($changes)) {
 Read-Host -Prompt "Press any key to continue..."
 
 ```
+
+![](assets/powershell.assets/file-20250610185336141.png)
+ 
