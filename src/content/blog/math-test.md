@@ -1,0 +1,91 @@
+---
+title: 数学公式测试
+description: "关于「数学公式测试」的记录与想法"
+pubDate: 2025-06-11
+image: /image/p1.png
+categories:
+  - life
+tags:
+  - day
+---
+📅 **时间**: 19:19  
+🌤️ **天气**: 银川 21~36℃ 晴
+
+> 桃花尽日随流水，洞在清溪何处边。
+
+<cite style="text-align: right; display: block;">— 张旭 · 《桃花溪》</cite>
+
+# 正文
+
+在数学中，定积分求导是通过**微积分基本定理**来联系定积分和导数的。我们通常讨论的是对含有参数的定积分函数进行求导，例如变上限积分的情况。
+
+---
+
+### 一、微积分基本定理（用于求导）
+
+设函数 $ f(t) $ 在区间 $[a, b]$ 上连续，且函数 $ F(x) $ 定义为：
+
+$$
+F(x) = \int_a^x f(t) \, dt
+$$
+
+则 $ F(x) $ 在 $[a, b]$ 上可导，并且有：
+
+$$
+F'(x) = \frac{d}{dx} \int_a^x f(t) \, dt = f(x)
+$$
+
+---
+
+### 二、含变量上限的定积分求导（Leibniz 公式）
+
+更一般地，如果上下限都是关于 $ x $ 的函数，那么可以使用 **Leibniz 求导法则**：
+
+$$
+\frac{d}{dx} \left( \int_{u(x)}^{v(x)} f(t) \, dt \right) = f(v(x)) \cdot v'(x) - f(u(x)) \cdot u'(x)
+$$
+
+---
+
+### 三、例子解析
+
+#### 例1：
+$$
+\frac{d}{dx} \int_0^x e^{t^2} \, dt
+$$
+
+解：根据微积分基本定理，
+$$
+= e^{x^2}
+$$
+
+---
+
+#### 例2：
+$$
+\frac{d}{dx} \int_{\sin x}^{x^2} \ln t \, dt
+$$
+
+解：应用 Leibniz 法则，
+
+$$
+= \ln(x^2) \cdot (x^2)' - \ln(\sin x) \cdot (\sin x)'
+= \ln(x^2) \cdot 2x - \ln(\sin x) \cdot \cos x
+$$
+
+---
+
+### 四、带参数的积分求导（更复杂情况）
+
+如果被积函数也依赖于 $ x $，即形如：
+
+$$
+F(x) = \int_{a(x)}^{b(x)} f(x, t) \, dt
+$$
+
+那么其导数由**Leibniz 积分法则**给出：
+
+$$
+\frac{d}{dx} F(x) = f(x, b(x)) \cdot b'(x) - f(x, a(x)) \cdot a'(x) + \int_{a(x)}^{b(x)} \frac{\partial}{\partial x} f(x, t) \, dt
+$$
+

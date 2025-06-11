@@ -20,6 +20,7 @@ const { title, image, headings = [], showTOC = false } = Astro.props;
     <PointerOnNavigation />
     <Header description={SITE_DESCRIPTION} favicon={SITE_FAVICON} image={image} />
     <title>{`${title} - ${SITE_TAB}`}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
 
     <!-- Initial theme setup on first load -->
     <script define:vars={{ SITE_THEME }} is:inline>
