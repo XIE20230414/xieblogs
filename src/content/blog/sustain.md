@@ -2,7 +2,7 @@
 title: sustain
 description: 「voc」
 pubDate: 2025-06-11
-image: /image/p1.png
+image: /image/p19.png
 categories:
   - life
 tags:
@@ -90,7 +90,9 @@ repeatedly
 
 domestic
 
-> [!“routine”常见的中文意思是“常规”“惯例”“日常工作”“例行公事”。例如，“daily routine”表示“日常惯例”，即每天固定的行为模式；“work routine”表示“工作常规”，即工作中的固定流程和任务安排。它通常用来描述那些经常重复、有规律的活动或行为模式。]
+> “routine”常见的中文意思是“常规”“惯例”“日常工作”“例行公事”。例如，“daily routine”表示“日常惯例”，即每天固定的行为模式；“work routine”表示“工作常规”，即工作中的固定流程和任务安排。它通常用来描述那些经常重复、有规律的活动或行为模式。
+
+
 > - domestic routine 家务活
 - domestic life 家居生活
 
