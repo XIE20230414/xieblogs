@@ -1,0 +1,49 @@
+---
+title: latex在网页渲染出错
+description: "关于「latex在网页渲染出错」的记录与想法"
+pubDate: 2025-06-11
+image: /image/p13.png
+categories:
+  - life
+tags:
+  - day
+---
+📅 **时间**: 22:28  
+🌤️ **天气**: 银川 24~38℃ 晴
+
+> 君埋泉下泥销骨，我寄人间雪满头。
+
+<cite style="text-align: right; display: block;">— 白居易 · 《梦微之》</cite>
+
+# 正文
+错误现象: 
+公式渲染成功后紧接着又出现未渲染的相同公式——这通常表示在网页部署和渲染过程中存在某种形式的内容重复或原始文本未被完全替换的问题。
+
+这可能由以下原因造成：
+ * Markdown 到 HTML 的转换层重复输出： Markdown 处理器可能在生成 HTML 时，错误地将包含公式的文本输出了两次。第一次被 LaTeX 渲染器处理，第二次则没有。
+ * LaTeX 渲染器未能完全替换原始文本： 尽管 LaTeX 渲染器（如 MathJax 或 KaTeX）成功渲染了公式，但它可能没有彻底地从 DOM 中移除或隐藏原始的文本，导致原始和渲染后的版本同时存在。
+ 
+解决方案：
+
+1. 检查了依赖版本兼容性：
+   - 确认了 `rehype-katex` (^7.0.1) 和 `remark-math` (^6.0.0) 的版本是最新的
+   - 确认了 Astro 相关依赖（astro ^5.8.0, @astrojs/mdx ^4.3.0 等）都是最新版本
+
+2. 添加了 KaTeX CSS 文件：
+   在 `src/layouts/BaseLayout.astro` 中添加了：
+   ```html
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+   ```
+
+3. 创建了测试文件：
+   在 `src/content/blog/math-test.md` 中添加了各种数学公式的测试用例，包括：
+   - 行内公式：$E = mc^2$
+   - 块级公式：二项式系数
+   - 矩阵
+   - 多行公式
+
+4. 重新安装了依赖：
+   - 删除了 `node_modules` 和 `pnpm-lock.yaml`
+   - 使用 `pnpm install` 重新安装了所有依赖
+
+md好sb的bug
