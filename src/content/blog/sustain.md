@@ -434,7 +434,7 @@ optimistic
 charity
 
 canteen
--  i often see my teacher eating his {lunc} by himself in the cantee
+-  i often see my teacher eating his  by himself in the cantee
 elastic
 - the girl tied her hair with an elastic band
 
@@ -473,7 +473,7 @@ veteran
 
 nourish 
 - milk is all we need to nourish a small baby
-> [!NOTE]
+> 
 > “老兵不死，他们只是逐渐凋零”可以翻译为：
 > **“Veterans never die; they just fade away.”**
 > 
