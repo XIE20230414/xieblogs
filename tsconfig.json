@@ -14,7 +14,8 @@
       "@utils/*": ["src/utils/*"]
     },
     "strict": true, // 或 "target": "ES6"
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": [
     "src/pages/friend.astro",
