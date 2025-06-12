@@ -49,7 +49,7 @@ ping gitee.com
   ```
 - 修改为 HTTPS 地址：
   ```bash
-  git remote set-url origin https://gitee.com/你的用户名/项目名.git
+  git remote set-url origin https://gitee.com/你的用户名/项目名123.git
   ```
 - 设置 Git 凭证缓存避免每次输入账号密码：
   ```bash
