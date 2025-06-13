@@ -5,7 +5,8 @@ pubDate: 2025-06-13
 image: /image/p15.png
 categories:
   - life
-tags: []
+tags:
+  - voc
 ---
 📅 **时间**: 14:06  
 🌤️ **天气**: 银川 17~30℃ 小雨转阴
