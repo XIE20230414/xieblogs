@@ -1,0 +1,67 @@
+---
+import 'plyr/dist/plyr.css';
+
+interface Props {
+  videoSrc: string;
+}
+
+const { videoSrc } = Astro.props;
+---
+
+<div class="video-player-container">
+  <video
+    class="plyr-video"
+    controls
+    crossorigin
+    playsinline
+  >
+    <source src={videoSrc} type="video/mp4" />
+    <p class="vjs-no-js">
+      要观看此视频，请启用 JavaScript，并考虑升级到支持 HTML5 视频的 Web 浏览器
+    </p>
+  </video>
+</div>
+
+<script>
+  import Plyr from 'plyr';
+
+  // 初始化 Plyr
+  document.addEventListener('DOMContentLoaded', () => {
+    const players = document.querySelectorAll('.plyr-video');
+    players.forEach(player => {
+      new Plyr(player, {
+        controls: [
+          'play-large',
+          'play',
+          'progress',
+          'current-time',
+          'mute',
+          'volume',
+          'captions',
+          'settings',
+          'pip',
+          'airplay',
+          'fullscreen'
+        ],
+        i18n: {
+          speed: '速度',
+          normal: '正常'
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .video-player-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .plyr-video {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+</style> 
