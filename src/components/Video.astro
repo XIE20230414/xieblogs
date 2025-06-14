@@ -1,0 +1,37 @@
+---
+interface Props {
+  src: string;
+}
+
+const { src } = Astro.props;
+---
+
+<div class="video-wrapper">
+  <video
+    controls
+    crossorigin="anonymous"
+    playsinline
+    class="video-player"
+    preload="metadata"
+    width="100%"
+    height="auto"
+  >
+    <source src={src} type="video/mp4" />
+    <p>您的浏览器不支持 HTML5 视频播放</p>
+  </video>
+</div>
+
+<style>
+  .video-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 1rem auto;
+  }
+
+  .video-player {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+  }
+</style>
