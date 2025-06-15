@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -9,9 +12,6 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { visit } from "unist-util-visit";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { CODE_THEME, USER_SITE } from "./src/config.ts";
 
@@ -61,7 +61,78 @@ export default defineConfig({
     },
   },
   integrations: [
-    mdx(),
+    mdx({
+      rehypePlugins: [
+        () => {
+          return (tree) => {
+            visit(tree, "element", (node) => {
+              // 处理 Markdown 图片语法
+              if (node.tagName === "img") {
+                const src = node.properties?.src;
+                if (src && src.endsWith(".mp4")) {
+                  // 创建 VideoPlayer 组件
+                  const videoComponent = {
+                    type: "mdxJsxFlowElement",
+                    name: "VideoPlayer",
+                    attributes: [
+                      {
+                        type: "mdxJsxAttribute",
+                        name: "src",
+                        value: src,
+                      },
+                    ],
+                    children: [],
+                  };
+
+                  // 替换原始节点
+                  Object.assign(node, videoComponent);
+                }
+              }
+              // 处理 video 标签
+              else if (node.tagName === "video") {
+                const videoSrc = node.properties?.src;
+                if (videoSrc) {
+                  // 创建 VideoPlayer 组件
+                  const videoComponent = {
+                    type: "mdxJsxFlowElement",
+                    name: "VideoPlayer",
+                    attributes: [
+                      {
+                        type: "mdxJsxAttribute",
+                        name: "src",
+                        value: videoSrc,
+                      },
+                    ],
+                    children: [],
+                  };
+
+                  // 替换原始节点
+                  Object.assign(node, videoComponent);
+                }
+              }
+              // 处理包裹视频的 p 标签
+              else if (node.tagName === "p") {
+                // 检查是否包含 video 标签或 img 标签
+                const hasVideo = node.children.some((child) =>
+                  (child.type === "element" && child.tagName === "video")
+                  || (child.type === "element" && child.tagName === "img" && child.properties?.src?.endsWith(".mp4")),
+                );
+
+                if (hasVideo) {
+                  // 移除 p 标签，保留其子元素
+                  Object.assign(node, {
+                    type: "element",
+                    tagName: "div",
+                    properties: {},
+                    children: node.children,
+                  });
+                }
+              }
+            });
+          };
+        },
+      ],
+    }),
     icon(),
     terser({
       compress: true,
@@ -237,8 +308,7 @@ export default defineConfig({
           delete node.properties.style;
           return node;
         },
-      },
-      ],
+      }],
     },
     remarkPlugins: [remarkMath, remarkReadingTime],
     rehypePlugins: [
@@ -252,13 +322,68 @@ export default defineConfig({
       () => {
         return (tree) => {
           visit(tree, "element", (node) => {
-            if (node.tagName === "img" && node.properties?.src?.endsWith(".mp4")) {
-              node.tagName = "video";
-              node.properties = {
-                controls: true,
-                style: "max-width: 800px; margin: 1rem auto; border-radius: 8px; overflow: hidden;",
-                src: `/blog/${node.properties.src}`,
-              };
+            // 处理图片标签
+            if (node.tagName === "img") {
+              const src = node.properties?.src;
+              if (src) {
+                // 如果是视频文件
+                if (src.endsWith(".mp4")) {
+                  // 创建视频容器
+                  const videoContainer = {
+                    type: "element",
+                    tagName: "div",
+                    properties: {
+                      class: "video-container",
+                    },
+                    children: [
+                      {
+                        type: "element",
+                        tagName: "video",
+                        properties: {
+                          "controls": true,
+                          "crossorigin": "anonymous",
+                          "playsinline": true,
+                          "preload": "metadata",
+                          "x-webkit-airplay": "allow",
+                          "webkit-playsinline": "true",
+                        },
+                        children: [
+                          {
+                            type: "element",
+                            tagName: "source",
+                            properties: {
+                              src,
+                              type: "video/mp4",
+                            },
+                            children: [],
+                          },
+                          {
+                            type: "element",
+                            tagName: "p",
+                            properties: {
+                              class: "vjs-no-js",
+                            },
+                            children: [
+                              {
+                                type: "text",
+                                value: "要观看此视频，请启用 JavaScript，并考虑升级到支持 HTML5 视频的 Web 浏览器",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  };
+
+                  // 替换原始节点
+                  Object.assign(node, videoContainer);
+                }
+                // 如果是图片文件
+                else if (src.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
+                  // 保持原样，只添加响应式类
+                  node.properties.class = "responsive-image";
+                }
+              }
             }
           });
         };
@@ -274,9 +399,12 @@ export default defineConfig({
       },
     },
     assetsInclude: ["**/*.mp4"],
+    optimizeDeps: {
+      include: [],
+    },
   },
   hooks: {
-    'astro:build:start': () => {
+    "astro:build:start": () => {
       copyVideos();
     },
   },
