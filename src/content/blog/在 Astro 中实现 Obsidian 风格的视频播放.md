@@ -1,6 +1,6 @@
 ---
 title: 在 Astro 中实现 Obsidian 风格的视频播放
-description: 如何在 Astro 博客中优雅地支持 Obsidian 风格的视频播放
+description: 如何在 Astro 博客中支持 Obsidian 风格的视频播放
 pubDate: 2025-06-14
 image: /image/p22.png
 categories:
