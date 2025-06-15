@@ -1,34 +1,21 @@
 ---
+import { getVideoPath } from "../utils/video";
+
 interface Props {
   src: string;
 }
 
 const { src } = Astro.props;
+const videoPath = getVideoPath(src);
 ---
 
-<div class="video-wrapper">
-  <video
-    controls
-    crossorigin="anonymous"
-    playsinline
-    class="video-player"
-    preload="metadata"
-    width="100%"
-    height="auto"
-  >
-    <source src={src} type="video/mp4" />
-    <p>您的浏览器不支持 HTML5 视频播放</p>
-  </video>
-</div>
+<video controls style="max-width: 800px; margin: 1rem auto; border-radius: 8px; overflow: hidden;" src={videoPath}>
+  <source src={videoPath} type="video/mp4" />
+  您的浏览器不支持视频播放。
+</video>
 
 <style>
-  .video-wrapper {
-    width: 100%;
-    max-width: 800px;
-    margin: 1rem auto;
-  }
-
-  .video-player {
+  video {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
