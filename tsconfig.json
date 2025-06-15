@@ -14,10 +14,10 @@
       "@utils/*": ["src/utils/*"]
     },
     "strict": true,
-    "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types"],
     "jsx": "preserve",
     "jsxImportSource": "astro",
+    "typeRoots": ["./node_modules/@types"],
+    "esModuleInterop": true,
     "types": ["astro/client"]
   },
   "exclude": [

@@ -1,3 +1,7 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -9,9 +13,6 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { visit } from "unist-util-visit";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { CODE_THEME, USER_SITE } from "./src/config.ts";
 
@@ -256,7 +257,7 @@ export default defineConfig({
               node.tagName = "video";
               node.properties = {
                 controls: true,
-                style: "max-width: 800px; margin: 1rem auto; border-radius: 8px; overflow: hidden;",
+                style: "max-width: 100%; margin: 1rem auto; border-radius: 8px; overflow: hidden;",
                 src: `/blog/${node.properties.src}`,
               };
             }
@@ -276,7 +277,7 @@ export default defineConfig({
     assetsInclude: ["**/*.mp4"],
   },
   hooks: {
-    'astro:build:start': () => {
+    "astro:build:start": () => {
       copyVideos();
     },
   },
