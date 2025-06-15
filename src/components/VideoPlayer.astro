@@ -2,23 +2,15 @@
 import "plyr/dist/plyr.css";
 
 interface Props {
-  src: string;
+  videoSrc: string;
 }
 
-const { src } = Astro.props;
+const { videoSrc } = Astro.props;
 ---
 
 <div class="video-player-container">
-  <video
-    controls
-    crossorigin="anonymous"
-    playsinline
-    class="video-player"
-    preload="metadata"
-    x-webkit-airplay="allow"
-    webkit-playsinline="true"
-  >
-    <source src={src} type="video/mp4" />
+  <video class="plyr-video" controls crossorigin="anonymous" playsinline>
+    <source src={videoSrc} type="video/mp4" />
     <p class="vjs-no-js">要观看此视频，请启用 JavaScript，并考虑升级到支持 HTML5 视频的 Web 浏览器</p>
   </video>
 </div>
@@ -53,119 +45,18 @@ const { src } = Astro.props;
       }
     });
   });
-
-  // 添加移动端触摸控制支持
-  document.addEventListener("DOMContentLoaded", () => {
-    const videos = document.querySelectorAll<HTMLVideoElement>(".video-player");
-
-    videos.forEach((video) => {
-      // 双击全屏
-      video.addEventListener("dblclick", () => {
-        try {
-          if (video.requestFullscreen) {
-            video.requestFullscreen();
-          }
-        } catch (error) {
-          console.error("全屏请求失败:", error);
-        }
-      });
-
-      // 触摸控制
-      let touchStartX = 0;
-      let touchStartTime = 0;
-
-      video.addEventListener("touchstart", (e: TouchEvent) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartTime = Date.now();
-      });
-
-      video.addEventListener("touchend", (e: TouchEvent) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndTime = Date.now();
-        const deltaX = touchEndX - touchStartX;
-        const deltaTime = touchEndTime - touchStartTime;
-
-        // 快速滑动切换播放/暂停
-        if (Math.abs(deltaX) < 10 && deltaTime < 300) {
-          if (video.paused) {
-            video.play().catch((error) => {
-              console.error("播放失败:", error);
-            });
-          } else {
-            video.pause();
-          }
-        }
-      });
-
-      // 强制移除内联样式
-      video.removeAttribute("style");
-    });
-  });
 </script>
 
 <style>
   .video-player-container {
     width: 100%;
-    margin: 0;
-    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
-  .video-player {
+  .plyr-video {
     width: 100%;
-    height: auto;
-    display: block;
     border-radius: 8px;
     overflow: hidden;
-    background: #000;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  /* 平板设备 */
-  @media (max-width: 1024px) {
-    .video-player-container {
-      width: 100%;
-    }
-  }
-
-  /* 大屏手机 */
-  @media (max-width: 767px) {
-    .video-player-container {
-      width: 100%;
-    }
-
-    .video-player {
-      border-radius: 4px;
-    }
-  }
-
-  /* 中等手机 */
-  @media (max-width: 414px) {
-    .video-player-container {
-      width: 100%;
-      margin: 0;
-    }
-
-    .video-player {
-      border-radius: 0;
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  /* 小屏手机 */
-  @media (max-width: 375px) {
-    .video-player-container {
-      width: 100%;
-      margin: 0;
-    }
-
-    .video-player {
-      border-radius: 0;
-      width: 100%;
-      height: auto;
-    }
   }
 </style>

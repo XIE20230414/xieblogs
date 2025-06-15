@@ -1,6 +1,6 @@
 ---
 title: 在 Astro 中实现 Obsidian 风格的视频播放
-description: 如何在 Astro 博客中支持 Obsidian 风格的视频播放
+description: 如何在 Astro 博客中优雅地支持 Obsidian 风格的视频播放
 pubDate: 2025-06-14
 image: /image/p22.png
 categories:
@@ -80,50 +80,7 @@ export default defineConfig({
 ![](assets/2025-06-14.assets/我一直在哭.mp4)
 ```
 
-### 适配移动端:
-
-1. **文件扩展名识别**：
-
-```javascript
-if (src.endsWith(".mp4")) {
-  // 处理视频文件
-}
-else if (src.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
-  // 处理图片文件
-}
-```
-
-- 通过检查文件扩展名来判断文件类型
-- `.mp4` 结尾的文件会被识别为视频
-- `.jpg`、`.jpeg`、`.png` 等结尾的文件会被识别为图片
-
-2. **转换过程**：
-   当遇到 `![](assets/2025-06-14.assets/我一直在哭.mp4)` 这样的 Markdown 语法时：
-
-- 首先被解析为 `img` 标签
-- 然后检查 `src` 属性是否以 `.mp4` 结尾
-- 如果是视频文件，就自动转换为视频播放器结构：
-
-```html
-<div class="video-container">
-  <video controls crossorigin="anonymous" playsinline preload="metadata" ...>
-    <source src="..." type="video/mp4" />
-    <p>...</p>
-  </video>
-</div>
-```
-
-3. **样式应用**：
-
-- 视频容器使用 `video-container` 类
-- 图片使用 `responsive-image` 类
-- 这些类都定义了响应式布局
-
-所以现在可以：
-
-1. 用 `![](视频.mp4)` 语法插入视频
-2. 用 `![](图片.jpg)` 语法插入图片
-3. 系统会自动识别并转换为合适的 HTML 结构
+它会自动被转换为一个视频播放器。
 
 ## 优点
 
@@ -139,20 +96,19 @@ else if (src.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
 2. 视频文件路径要正确（包括大小写）
 3. 视频格式要使用浏览器支持的格式（如 MP4）
 4. **路径处理的重复叠加**：
-
    - Markdown 原始路径：`assets/2025-06-14.assets/我一直在哭.mp4`
    - Astro 自动处理：`/blog/assets/2025-06-14.assets/我一直在哭.mp4`
    - 我们的 rehype 插件又加了一次：`/blog/blog/assets/...`
    - ObsidianVideo 组件又加了一次：`/blog/blog/blog/assets/...`
-     **问题根源**：
+	**问题根源**：
    - 我们错误地假设 Astro 不会处理路径
    - 实际上 Astro 已经自动将 `assets/` 开头的路径转换为相对于 `public` 目录的路径
    - 我们的代码又重复添加了 `/blog/` 前缀，导致路径重复
-     **解决方案**：
+	**解决方案**：
    - 在 `astro.config.mjs` 中：直接使用 Astro 处理过的路径，不再添加 `/blog/` 前缀
    - 在 `ObsidianVideo.astro` 中：直接使用传入的 `src`，不再添加 `/blog/` 前缀
 
-5. **正确的路径处理流程**：
+4. **正确的路径处理流程**：
    ```
    Markdown: assets/2025-06-14.assets/我一直在哭.mp4
    ↓ (Astro 自动处理)
@@ -162,9 +118,7 @@ else if (src.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i)) {
    ```
 
 这个问题的教训是：在使用框架时，需要先了解框架的默认行为，避免重复处理已经被框架处理过的内容。
-
 nmd
-
 ## 总结
 
 通过这个实现，我们：
@@ -175,5 +129,6 @@ nmd
 4. 实现了 Obsidian 风格的视频播放
 
 这样，我们就可以在保持 Obsidian 写作习惯的同时，在 Astro 博客中展示视频内容了。
+
 
 ![](assets/在%20Astro%20中实现%20Obsidian%20风格的视频播放.assets/我怀念的.mp4)
