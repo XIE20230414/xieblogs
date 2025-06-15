@@ -7,8 +7,9 @@ interface Props {
 
 const { src } = Astro.props;
 
-// 直接使用 Astro 处理过的路径
-const videoPath = src;
+// 处理 Obsidian 风格的路径
+// 从 assets/2025-06-14.assets/我一直在哭.mp4 转换为 /blog/assets/2025-06-14.assets/我一直在哭.mp4
+const videoPath = `/blog/assets/${src}`;
 
 // 调试信息
 console.log("Original src:", src);
@@ -16,8 +17,9 @@ console.log("Converted path:", videoPath);
 ---
 
 <div class="video-container">
-  <video controls style="max-width:800px;margin:1rem auto;border-radius:8px;overflow:hidden" src={videoPath}>
+  <video controls crossorigin="anonymous" playsinline class="obsidian-video" preload="metadata">
     <source src={videoPath} type="video/mp4" />
+    <p class="vjs-no-js">要观看此视频，请启用 JavaScript，并考虑升级到支持 HTML5 视频的 Web 浏览器</p>
   </video>
   <!-- 添加调试信息显示 -->
   <div class="debug-info" style="display: block;">
@@ -35,11 +37,10 @@ console.log("Converted path:", videoPath);
     margin: 1rem auto;
   }
 
-  video {
+  .obsidian-video {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
-    background: #000;
   }
 
   .debug-info {

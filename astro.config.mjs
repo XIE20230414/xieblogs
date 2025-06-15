@@ -9,10 +9,47 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { visit } from "unist-util-visit";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { CODE_THEME, USER_SITE } from "./src/config.ts";
 
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+
+// 复制视频文件的函数
+function copyVideos() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const rootDir = path.join(__dirname);
+  const sourceDir = path.join(rootDir, "src", "content", "blog", "assets");
+  const targetDir = path.join(rootDir, "public", "blog", "assets");
+
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
+  }
+
+  function copyDir(src, dest) {
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+
+      if (entry.isDirectory()) {
+        if (!fs.existsSync(destPath)) {
+          fs.mkdirSync(destPath, { recursive: true });
+        }
+        copyDir(srcPath, destPath);
+      }
+      else {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    }
+  }
+
+  copyDir(sourceDir, targetDir);
+  console.log("视频文件已复制到 public 目录");
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -216,17 +253,12 @@ export default defineConfig({
         return (tree) => {
           visit(tree, "element", (node) => {
             if (node.tagName === "img" && node.properties?.src?.endsWith(".mp4")) {
-              const videoPath = node.properties.src; // 此时 src 已经是 Astro 处理过的路径
-
               node.tagName = "video";
               node.properties = {
                 controls: true,
-                style: "width:100%;max-width:800px;margin:1rem auto;border-radius:8px;overflow:hidden;object-fit:contain",
-                class: "frosti-video",
-                playsinline: true,
-                src: videoPath,
+                style: "max-width: 800px; margin: 1rem auto; border-radius: 8px; overflow: hidden;",
+                src: `/blog/${node.properties.src}`,
               };
-              node.children = [];
             }
           });
         };
@@ -242,15 +274,10 @@ export default defineConfig({
       },
     },
     assetsInclude: ["**/*.mp4"],
-    server: {
-      fs: {
-        allow: [
-          "src/content",
-          "src/styles",
-          "node_modules",
-          "public",
-        ],
-      },
+  },
+  hooks: {
+    'astro:build:start': () => {
+      copyVideos();
     },
   },
 });
