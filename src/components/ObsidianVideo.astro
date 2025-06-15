@@ -3,11 +3,9 @@ import { getImage } from "astro:assets";
 
 interface Props {
   src: string;
-  title?: string;
-  poster?: string;
 }
 
-const { src, title = "视频", poster } = Astro.props;
+const { src } = Astro.props;
 
 // 直接使用 Astro 处理过的路径
 const videoPath = src;
@@ -18,16 +16,8 @@ console.log("Converted path:", videoPath);
 ---
 
 <div class="video-container">
-  <video
-    controls
-    preload="metadata"
-    aria-label={title}
-    style="max-width:800px;margin:1rem auto;border-radius:8px;overflow:hidden"
-    src={videoPath}
-    poster={poster}
-  >
+  <video controls style="max-width:800px;margin:1rem auto;border-radius:8px;overflow:hidden" src={videoPath}>
     <source src={videoPath} type="video/mp4" />
-    <p>您的浏览器不支持 HTML5 视频播放。请尝试使用现代浏览器访问。</p>
   </video>
   <!-- 添加调试信息显示 -->
   <div class="debug-info" style="display: block;">
