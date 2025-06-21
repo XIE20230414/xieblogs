@@ -18,6 +18,13 @@ html {
   @apply scroll-smooth;
 }
 
+html,
+body {
+  font-family:
+    "LXGW WenKai", "LXGW WenKai Screen", "Microsoft YaHei", "微软雅黑", "PingFang SC", "Hiragino Sans GB",
+    "WenQuanYi Micro Hei", "sans-serif";
+}
+
 kbd {
   @apply kbd;
 }
